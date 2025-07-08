@@ -7,90 +7,85 @@ beastversion: 2.7.7
 ---
 
 
+
+
 # Background
 
-This is a template tutorial and style guide to help formatting Markdown tutorials. 
+Evolutionary rate variation is an intrinsic feature of biological data, being driven by a range of life-history, environmental, and biochemical factors. Rates of molecular evolution can vary across lineages, across nucleotide sites, and across regions of the genome. These forms of variation can interact to produce complex patterns of heterogeneity in the data, particularly at the genomic scale {% cite Ho2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. Thus, accounting for evolutionary rate variation represents an important aspect of phylogenetic analysis and molecular dating {% cite dosReis2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. A range of models are available for this purpose. 
 
-Please start the tutorial by adding some background about the tutorial in this section, clearly explaining the question/problem and the type of analysis that the methods in the tutorial should be used for. In the next section please add a short description of all the programs or packages used in the tutorial. The tutorial exercise should follow this part. Please add a short explanation on the dataset used in the tutorial before starting with the exercise. Please also add a section after the exercise interpreting the results. End your tutorial with some useful links.
+This tutorial will provide an introduction to using multiple relaxed clock models to account for rate variation across lineages and across subsets of the data set. The tutorial will use mitochondrial genome data from passerine birds. The exercise will guide you through setting up two contrasting models of among-lineage rate variation to estimate phylogenetic relationships, evolutionary rates, and node times using the program BEAST v{{ page.beastversion }}.
 
-Some of the text in this tutorial template is just dummy filler text. Please do not try to understand it.
 
 ----
 
 # Programs used in this Exercise 
 
-### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees {% cite Bouckaert2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. This tutorial uses the BEAST2 version 2.4.2.
 
 ----
 
-# Practical: Exercise title
+# Practical: Using multiple clock models
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce porta augue id vulputate iaculis. Sed non posuere lectus. Integer at magna quis nulla tempus cursus. Integer ut nisl elit. Nam pellentesque pharetra orci eu facilisis. Nullam vitae leo tempus nunc consequat finibus ut ut nisi. Phasellus vitae faucibus dolor, id venenatis lacus. Sed eu lacus a nibh luctus semper. Proin non tellus odio. Duis elementum lorem eget nisl rhoncus feugiat. In hendrerit vehicula purus. Aliquam ornare libero quis tincidunt efficitur. Nam sapien augue, mattis nec hendrerit ut, commodo in nisi.
-
-## This is a subsection
-Quisque a dictum erat. Curabitur congue sapien sit amet pharetra pretium. Proin posuere euismod velit, eget faucibus ex varius id. Fusce sodales maximus malesuada. Mauris auctor dui in justo interdum egestas. Cras dapibus commodo nulla vitae congue. Vestibulum sit amet justo sit amet ex pretium bibendum. Donec ac mollis lorem, vel semper enim. Suspendisse sit amet auctor dui. Nullam ac efficitur mauris. Proin aliquam tincidunt felis nec semper. Vestibulum vestibulum, eros sit amet consectetur blandit, elit dolor posuere sem, a porta purus odio sit amet quam. Quisque dapibus erat sem, at vulputate libero dapibus sit amet. Mauris rhoncus odio nisl, nec interdum lacus consequat nec. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-Etiam tincidunt porttitor rutrum. Nulla facilisi. Mauris vehicula, justo ac ultricies tempus, quam erat hendrerit dui, vel pharetra sapien nibh vel ex. Sed molestie eu dui in laoreet. Pellentesque ultrices, orci vitae lacinia suscipit, erat sapien elementum ligula, sit amet viverra ante lorem eget elit. Cras euismod felis libero, pharetra lobortis arcu congue vehicula. Nullam posuere dapibus mauris, eget vulputate ligula auctor eget. Aenean et tempus est. Aliquam vehicula arcu vitae metus dictum viverra. Aliquam vitae purus mauris. Nullam interdum mauris eget sagittis consequat. Quisque in orci elementum, eleifend tortor eget, bibendum orci. Etiam aliquet dolor non neque semper fermentum. Praesent vitae venenatis mi, ut faucibus ligula. Phasellus vitae lorem neque. Interdum et malesuada fames ac ante ipsum primis in faucibus.
-
-### This is a sub-subsection
-Etiam posuere urna ut condimentum sagittis. Suspendisse posuere, ex nec eleifend fringilla, nisl augue posuere augue, elementum mollis justo felis sed purus. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Mauris efficitur eros ut turpis elementum vestibulum. Sed sit amet nisi at nunc luctus laoreet id ac enim. Aliquam elementum risus id urna dictum fringilla. Aenean lobortis, risus euismod molestie pulvinar, massa odio pharetra nulla, vitae facilisis neque magna sed lorem. Praesent ipsum enim, commodo ut pharetra in, sollicitudin ac massa. Donec et interdum mauris. Ut molestie, risus quis fermentum placerat, diam risus posuere nisi, eget viverra tortor neque ac sem. Donec viverra magna non dolor aliquam, in suscipit massa facilisis. Suspendisse congue arcu sed risus consectetur commodo. Aenean metus odio, volutpat at tincidunt id, ullamcorper in dui. Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Cras ut sem in odio sodales iaculis non quis neque.
-
-Quisque non mollis massa, nec eleifend dolor. Proin porta elit metus, a lobortis enim venenatis ac. Nam scelerisque consectetur mi et gravida. Vestibulum placerat, est vitae euismod finibus, purus nisl viverra quam, eget condimentum mauris magna vel nisl. Phasellus pretium vitae diam in volutpat. Cras gravida non quam ut consectetur. Vivamus congue vulputate lorem.
-
-## This is another subsection
-Praesent sodales est in tempor commodo. Suspendisse nulla metus, gravida eget malesuada vel, viverra eu felis. In vitae leo facilisis, ornare nunc nec, tempor tortor. Duis pretium mi eros, at consequat neque tincidunt eget. Mauris vestibulum venenatis arcu, eget lacinia arcu faucibus ut. Phasellus aliquam dui ipsum, a eleifend lacus fermentum at. Suspendisse congue orci quis ante consequat ornare. Integer a massa blandit, vestibulum eros ut, pulvinar augue. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
-
-Quisque a urna a massa congue rhoncus. Donec bibendum tempus velit. Nam varius augue sit amet lacinia hendrerit. Proin tincidunt massa ut mi vestibulum placerat. Phasellus eget dui molestie, aliquet libero efficitur, vehicula ex. Pellentesque ultricies ante leo, eu lobortis odio convallis id. Donec vitae risus dui. Nulla orci velit, ultricies sed finibus quis, blandit quis arcu. Morbi non neque non odio rutrum condimentum. Vivamus libero metus, vehicula vitae elit ac, tincidunt pretium dui. Proin condimentum fringilla diam, blandit blandit nisl dapibus vel. Proin ante felis, accumsan eget ligula et, lobortis dictum nunc. Mauris a ante dignissim ipsum tincidunt tristique.
-
--------
-
-# Tutorial style guide
-
-## Text styling
-
-This is how to write _italic text_.
-
-This is how to write **bold text**.
-
-This is how to write **_bold and italic text_**.
-
-Do text superscripts like this 7^th, x^2y or  x^(2y + 3z).
+This tutorial will walk you through an analysis of mitochondrial genome data from 20 passerine birds, representing the three suborders of this highly diverse order of vertebrates. Specifically, the data set comprises the first and second codon sites of the 13 protein-coding genes that are found in the mitochondrial genome. The analyses will include two different configurations of clock models to account for evolutionary rate variation in the data. 
 
 
-## Lists
 
-### Unnumbered lists
+## The data 
 
-- Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-- Integer pharetra arcu ut nisl mollis ultricies.
-	- Fusce nec tortor at enim cursus dictum.
-	- Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-- In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-- Nam vitae turpis eu lacus imperdiet mollis id at augue.
-- Sed sed turpis ac dolor mollis accumsan.
+Passerines (Order Passeriformes), also known as perching birds, comprise nearly 60% of all living bird species. They have diversified into a broad range of ecological roles and can be found in almost all habitats across the world ([Figure 1](#passerines)). Mitochondrial genomes have been sequenced for hundreds of passerine species. 
 
 
-### Numbered lists
+<figure>
+	<a id="passerines"></a>
+	<img src="figures/passerines.png" alt="passerines">
+	<figcaption>Figure 1: Rifleman (<i>Acanthisitta chloris</i>; <i>Acanthisitti</i>), Fairy Pitta (<i>Pitta nympha</i>, <i>Tyranni</i>), and American Robin (<i>Turdus migratorius</i>; <i>Passeri</i>), representing the three major lineages of passerine birds. Creative Commons photographs by Brian Ralphs, Jason Thompson, Rhododendrites.</figcaption>
+</figure>
+<br>
 
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-2. Integer pharetra arcu ut nisl mollis ultricies.
-	1. Fusce nec tortor at enim cursus dictum.
-	2. Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-1. In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-1. Nam vitae turpis eu lacus imperdiet mollis id at augue.
-1. Sed sed turpis ac dolor mollis accumsan.
 
-### Mixed lists
+The data files for this tutorial can be downloaded from the left-hand panel. The data set in this tutorial includes publicly available nucleotide sequences that were assembled for a study of evolutionary rate variation in mitochondrial genomes from passerine birds {% cite Nguyen2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}.
 
-1. Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-2. Integer pharetra arcu ut nisl mollis ultricies.
-	* Fusce nec tortor at enim cursus dictum.
-	* Phasellus nec urna quis velit eleifend convallis sodales nec augue.
-1. In iaculis turpis in massa facilisis, quis ultricies nibh ultricies.
-1. Nam vitae turpis eu lacus imperdiet mollis id at augue.
-1. Sed sed turpis ac dolor mollis accumsan.
+The data set comprises two separate mitochondrial sequence alignments from the 20 passerine taxa. The files contain the first codon sites (`passerines_pc1.nex`) and second codon sites (`passerines_pc2.nex`) of the 13 protein-coding genes in the mitochondrial genome. Together, these data sets comprise 7232 aligned nucleotide sites. The third codon sites have been excluded because they show signs of substitution saturation – they evolve rapidly and have undergone such a large amount of change that the evolutionary signal has been eroded. 
+
+
+## Creating the analysis file with BEAUti
+
+We will use BEAUti2 to select the priors and starting values for our analysis and save these settings into a BEAST2 XML file.
+
+> Begin by starting **BEAUti2**.
+
+
+### Installing BEAST2 packages
+
+Next, we need to install a BEAST2 package that will be used in this analysis. The package is called **bModelTest**.
+
+> Open the **BEAST 2 Package Manager** by navigating to **File > Manage Packages**. Install the **bModelTest** package by selecting it and clicking the **Install/Upgrade** button ([Figure 2]()). 
+>
+>
+
+<figure>
+	<a id="packagemanager"></a>
+	<img src="figures/packagemanager.png" alt="BEAST2 Package Manager">
+	<figcaption>Figure 2: Installing bModelTest in the BEAST 2 Package Manager. </figcaption>
+</figure>
+<br>
+
+
+After the installation of a package, the program is on your computer, but BEAUti2 is unable to load the template files for the newly installed model unless it is restarted. So, you will now need to restart BEAUti2 so that bModelTest is available. 
+
+> Close the **BEAST 2 Package Manager** and restart **BEAUti2** to load the **bModelTest** package.
+
+
+
+
+<figure>
+	<a id=""></a>
+	<img src="figures/.png" alt="">
+	<figcaption>Figure 2: </figcaption>
+</figure>
+<br>
+
+
 
 
 ## Figures
@@ -212,4 +207,3 @@ Links to equations or different sections within the same document are a little b
 # Relevant References
 
 {% bibliography --cited --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
-
