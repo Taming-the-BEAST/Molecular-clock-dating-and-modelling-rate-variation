@@ -8,7 +8,6 @@ beastversion: 2.7.7
 
 
 
-
 # Background
 
 Evolutionary rate variation is an intrinsic feature of biological data, being driven by a range of life-history, environmental, and biochemical factors. Rates of molecular evolution can vary across lineages, across nucleotide sites, and across regions of the genome. These forms of variation can interact to produce complex patterns of heterogeneity in the data, particularly at the genomic scale {% cite Ho2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. Thus, accounting for evolutionary rate variation represents an important aspect of phylogenetic analysis and molecular dating {% cite dosReis2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. A range of models are available for this purpose. 
@@ -59,7 +58,7 @@ We will use BEAUti2 to select the priors and starting values for our analysis an
 
 Next, we need to install a BEAST2 package that will be used in this analysis. The package is called **bModelTest**.
 
-> Open the **BEAST 2 Package Manager** by navigating to **File > Manage Packages**. Install the **bModelTest** package by selecting it and clicking the **Install/Upgrade** button ([Figure 2]()). 
+> Open the **BEAST 2 Package Manager** by navigating to **File > Manage Packages**. Install the **bModelTest** package by selecting it and clicking the **Install/Upgrade** button ([Figure 2](#packagemanager)). 
 >
 >
 
@@ -76,6 +75,138 @@ After the installation of a package, the program is on your computer, but BEAUti
 > Close the **BEAST 2 Package Manager** and restart **BEAUti2** to load the **bModelTest** package.
 
 
+### Importing the sequence alignments
+
+Next we will load the sequence alignments from our two NEXUS files.
+
+> In the **Partitions tab**, import the data files by navigating to **File > Import Alignment** in the menu and then finding the data files `passerines_pc1.nex` and `passerines_pc2.nex` on your computer. Alternatively, you can simply drag and drop the files into the **BEAUti2** window.
+
+Now that the data are loaded into BEAUti2, we can unlink the site models, link the clock models, link the trees, and rename these variables so that they are easier to understand in the output files. 
+
+
+> Highlight the two data subsets (using **shift and click**) and click on **Unlink Site Models** to assume different models of sequence evolution for each of the two data subsets (the site models are typically already unlinked by default). Click the **Link Clock Models** button so that the two data subsets share the same model of branch rates. Click the **Link Trees** button to ensure that both data subsets share the same tree topology and branching times ([Figure 3](#partitions)). 
+>
+> Double click on the clock model for the first codon sites (**passerines_pc1**) and rename it to **passerinesClock**. Then click on the tree for the first codon sites (**passerines_pc1**) and rename it to **passerinesTree**. 
+
+<figure>
+	<a id="partitions"></a>
+	<img src="figures/partitions.png" alt="Partitions">
+	<figcaption>Figure 3: Unlinking site models and linking clock models and trees in the Partitions tab of BEAUti2. </figcaption>
+</figure>
+<br>
+
+
+### Specifying the Site Model
+
+The data set has been separated into the first and second codon sites of the mitochondrial protein-coding genes. The first and second codon sites are under differing degrees of selective constraint, so they typically show quite different patterns of evolution. Nucleotide changes at second codon sites often change the encoded amino acid (these are known as “nonsynonymous changes”), so they are under the greatest selective constraint and evolve the most slowly. In contrast, many of the changes at first codon sites do not result in a change to the encoded amino acid (these are known as “synonymous changes”), so they are under a lesser degree of selective constraint. We have excluded the third codon sites, where most nucleotide replacements are synonymous and thus do not change the encoded amino acid. Because most changes at third codon sites are synonymous, these changes occur at a high rate and third codon sites tend to become saturated with substitutions over time.  
+
+Given the contrasting evolutionary dynamics at first and second codon sites, we will allow a distinct model of sequence evolution for each of these data subsets. Instead of choosing specific nucleotide substitution models, however, we will use Bayesian model averaging. This approach allows us to treat the site models as nuisance parameters because they are not of immediate interest. Consequently, our estimates of the phylogeny, evolutionary rates, and node times will be averaged over the site models {% cite Bouckaert2017 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. 
+
+> Navigate to the **Site Model** tab. Select the first data subset (**passerines_pc1**) and select **BEAST Model Test** from the drop-down list. Check the **estimate box** for the **Mutation Rate**. Do the same for the second data subset (**passerines_pc2**). By checking the estimate boxes for the two mutation rates, we will be estimating the relative evolutionary rates for the first and second codon sites ([Figure 4](#sitemodel)). 
+
+<figure>
+	<a id="sitemodel"></a>
+	<img src="figures/sitemodel.png" alt="Site model">
+	<figcaption>Figure 4: Setting up BEAST Model Test for the site models for the two data subsets in the Site Model tab of BEAUti2. </figcaption>
+</figure>
+<br>
+
+
+
+### Specifying the Clock Model
+
+Here, we can specify the model of rate variation across branches of the tree. For this analysis we will use an uncorrelated lognormal model of branch-rate variation. The Relaxed Clock Log Normal option assumes that the substitution rates on each branch are independently drawn from a single, discretised lognormal distribution {% cite Drummond2006 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}.
+
+> Navigate to the **Clock Model** tab. Select **Relaxed Clock Log Normal** from the drop-down list. 
+
+The lognormal distribution has the advantage that one can estimate its variance, which reflects the extent to which the molecular clock needs to be relaxed. The uncorrelated relaxed clock models in BEAST2 are discretised for computational feasibility. This means that for any given parameters of the lognormal distribution, the probability density is discretised into some number of discrete rate bins. Each branch is then assigned to one of these bins. By default, BEAUti2 sets the **Number Of Discrete Rates** to **-1**. This means that the number of bins is equal to the number of branches in the tree. 
+
+Note that although we have assumed that first codon sites and second codon sites all share the same pattern of rate variation across branches, we have allowed these two data subsets to have different relative rates (by checking the two **estimate** boxes in the **Site Model** tab). This approach is commonly used because it captures some of the most important forms of evolutionary rate variation, without requiring the large number of parameters that would be introduced if we were to assign a separate relaxed clock to each data subset {% cite Duchene2020 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. 
+
+
+### Creating taxon sets
+
+Studies of genomic data have supported the division of passerines into three suborders: Acanthisitti, Tyranni, and Passeri (e.g., {% cite Stiller2024 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}). Together, Tyranni and Passeri form the group Eupasseres, which contains nearly all of the living passerine species (with the exception of the New Zealand wrens, suborder Acanthisitti). We can use these previous estimates of passerine relationships to place constraints on the tree topology ([Figure 5](#passerine_evolution)). 
+
+<figure>
+	<a id="passerine_evolution"></a>
+	<img src="figures/passerine_evolution.png" alt="Passerine Evolutionary Relationships">
+	<figcaption>Figure 5: Evolutionary relationships among the three suborders of passerine birds. </figcaption>
+</figure>
+<br>
+
+In addition, we can use a previous phylogenetic estimate of the age of the passerine crown group to inform the prior distribution for the age of the root. To incorporate these pieces of information, we need to create taxon sets in BEAUti2. 
+
+> Navigate to the **Priors** tab and scroll to the bottom of the window. Click the **+ Add Prior** button to create a new taxon set. Enter **Tyranni** for the **Taxon set label**, select the three taxa labelled with Tyranni, move these to the right-hand column, and click **OK** ([Figure 6](#taxonsets)). 
+
+
+<figure>
+	<a id="taxonsets"></a>
+	<img src="figures/taxonsets.png" width="75%" alt="Taxon sets">
+	<figcaption>Figure 6: Defining a taxon set called “Tyranni” in the Taxon set editor in BEAUti2.</figcaption>
+</figure>
+<br>
+
+> Create a new taxon set for Passeri by clicking the **+ Add Prior** button. Enter **Passeri** for the **Taxon set label**, select the 16 taxa labelled with Passeri, move these to the right-hand column, and click **OK**.
+>
+> Create a new taxon set for Eupasseres by clicking the **+ Add Prior** button. Enter **Eupasseres** for the **Taxon set label**, select all 19 of the taxa labelled with Tyranni and Passeri, move these to the right-hand column, and click **OK**.
+>
+> Create a new taxon set for Passeriformes by clicking the **+ Add Prior** button. Enter **Passeriformes** for the **Taxon set label**, select all 20 taxa in the data set, move these to the right-hand column, and click **OK**.
+>
+> Back in the **Priors** tab, check the **monophyletic** boxes next to each of these four groups that have been defined. 
+
+By enforcing monophyly on the group Eupasseres, which includes all of the taxa except the Rifleman (_Acanthisitta chloris_), we are forcing the root of the tree to be placed between Acanthisitti and Eupasseres. 
+
+
+
+### Specifying a calibration prior on the root
+
+In the **Priors** tab we can add an informative prior on the age of the root, based on a previous phylogenetic estimate of the age of crown passerines. This will allow us to calibrate the clock model. A recent study estimated the age of the passerine crown node at 48 million years, with a range of 43–53 million years {% cite Luo2025 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. We can approximate this using a lognormal distribution with an offset (minimum) of 43, mean of 5, and standard deviation of 0.5. 
+
+> Change the prior distribution on the age of **Passeriformes** to a **Log Normal** distribution. Reveal the options for the prior on **Passeriformes.prior** by clicking on the {% eqinline \blacktriangleright %}. Change the prior distribution by selecting **Log Normal** from the drop-down list. Check the box marked **Mean In Real Space** and set the mean **M** equal to **5.0** and the standard deviation **S** to **0.5**. Set the **Offset** of the lognormal distribution to **43.0** ([Figure 7](#rootcalibration)). 
+
+<figure>
+	<a id="rootcalibration"></a>
+	<img src="figures/rootcalibration.png" alt="">
+	<figcaption>Figure 7: Specifying an offset lognormal prior distribution on the age of the root. </figcaption>
+</figure>
+<br>
+
+
+### Specifying the remaining priors
+
+In the **Priors** tab we will leave the priors for the parameters of the site models at the default settings. 
+
+Since we are assuming that the branch rates are drawn from a lognormal distribution, this induces two hyperparameters: the mean (**ucldMean.c**) and standard deviation (**ucldStdev.c**). These are known as hyperparameters because they are parameters of the prior distribution. The hyperparameters have their own priors, known as hyperpriors. We will leave the priors for these hyperparameters at the default settings. 
+
+Next we will specify the prior distribution on the tree topology and branching times in the Priors tab. To reflect the evolutionary history of the passerine clade, we will use a model of diversification that accounts for both speciation and extinction. 
+
+> Change the tree model for **Tree.t:passerinesTree** to **Birth Death Model**. 
+
+
+
+
+
+
+### Set MCMC options and save the XML file
+
+Now that you have specified all of your data elements, models, priors, and operators, go to the **MCMC** tab to set the length of the Markov chain, sample frequency, and file names.
+
+
+> Navigate to the **MCMC** tab. Since we have a limited amount of time for this exercise, change the **Chain Length** to **2,000,000**.
+>
+> Reveal the options for the **tracelog** using the {% eqinline \blacktriangleright %} to the left. Change **Log Every** to **200**. Change the File Name to `passerines_LinkedClocks.log`.
+>
+> Reveal the options for the **treelog** using the {% eqinline \blacktriangleright %} to the left. Change **Log Every** to **200**. Change the File Name to `passerines_LinkedClocks.trees`. 
+
+Now we are ready to save the XML file!
+
+> Go to **File > Save As** and save the XML file as `passerines_LinkedClocks.xml`. Close **BEAUti2** when you are done. 
+
+
+
+
+
 
 
 <figure>
@@ -86,111 +217,6 @@ After the installation of a package, the program is on your computer, but BEAUti
 <br>
 
 
-
-
-## Figures
-
-
-<figure>
-	<a id="fig:example1"></a>
-	<img style="width:25%;" src="figures/Logo_bw.png" alt="">
-	<figcaption>Figure 1: This figure is 25% of the page width.</figcaption>
-</figure>
-
-
-<figure>
-	<a id="fig:example2"></a>
-	<img style="width:10%;" src="figures/Logo_bw.png" alt="">
-	<figcaption>Figure 2: This figure is only 10% of the page width.</figcaption>
-</figure>
-
-
-
-# Code
-
-A bit of inline monospaced font can be made `like this`. Larger code blocks can be made by using the code environment:
-
-Java:
-
-```java
-public class HelloWorld {
-
-    public static void main(String[] args) {
-        // Prints "Hello, World" to the terminal window.
-        System.out.println("Hello, World");
-    }
-
-}
-```
-
-XML:
-
-```xml
-	<BirthDeathSkylineModel spec="BirthDeathSkylineModel" id="birthDeath" tree="@tree" contemp="true">
-	      <parameter name="origin" id="origin" value ="100" lower="0."/>    
-	      <parameter name="R0" id="R0" value="2" lower="0." dimension ="10"/>
-	      <parameter name="becomeUninfectiousRate" id="becomeUninfectiousRate" value="1" lower="0." dimension ="10"/>
-	      <parameter name="samplingProportion" id="samplingProportion" value="0."/>
-	      <parameter name="rho" id="rho" value="1e-6" lower="0." upper="1."/>
-	</BirthDeathSkylineModel>
-```
-
-R:
-
-```R
-	> myString <- "Hello, World!"
-	> print (myString)
-	[1] "Hello, World!"
-```
-
-# Equations
-
-Inline equations: {% eqinline \dot{x} = \sigma(y-x) %}
-
-Displayed equations: 
-{% eq \left( \sum_{k=1}^n a_k b_k \right)^2 \leq \left( \sum_{k=1}^n a_k^2 \right) \left( \sum_{k=1}^n b_k^2 \right) %}
-
-
-
-## Instruction boxes
-
-Use block-quotes for step-by-step instruction that the user should perform (this will produce a framed box on the website):
-
-> The data we have is not the data we want, and the data we need is not the data we have.
-> 
-> We can input **any** formatted text in here:
->
-> - Even
-> - Lists
->
-> or equations:
->
-> {% eq (x_1, \ldots, x_n) \left( \begin{array}{ccc}
-      \phi(e_1, e_1) & \cdots & \phi(e_1, e_n) \\
-      \vdots & \ddots & \vdots \\
-      \phi(e_n, e_1) & \cdots & \phi(e_n, e_n)
-    \end{array} \right)
-  \left( \begin{array}{c}
-      y_1 \\
-      \vdots \\
-      y_n
-    \end{array} \right) %}
-
-
-
-
-
-
-# Hyperlinks
-
-Add links to figures like this: 
-
-- [Figure 1](#fig:example1) is 25% of the page width.
-- [Figure 2](#fig:example2) is 10% of the page width. 
-
-Add links to external URLs like [this](http://www.google.com). 
-
-Links to equations or different sections within the same document are a little buggy.
 
 
 ----
@@ -207,3 +233,4 @@ Links to equations or different sections within the same document are a little b
 # Relevant References
 
 {% bibliography --cited --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
+
