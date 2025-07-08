@@ -205,6 +205,68 @@ Now we are ready to save the XML file!
 
 
 
+## Using multiple relaxed clocks
+
+Now we will set up a second analysis in which we unlink the clock models between the two data subsets, so that one relaxed clock model is applied to the first codon sites and a second, separate relaxed clock model is applied to the second codon sites. 
+
+> Open **BEAUti2**. In the **Partitions** tab, import the data files `passerines_pc1.nex` and ` passerines_pc2.nex`.
+> 
+> Highlight the two data subsets (using **shift and click**) and click on **Unlink Site Models**. Then, click on **Unlink Clock Models** so that separate clock models are applied to the two data subsets. Click **Link Trees** to ensure that both data subsets share the same tree topology and branching times ([Figure 8](#partitions_unlinked)).
+>
+> Double click on the tree for the first codon sites (**passerines_pc1**) and rename it to **passerinesTree**. 
+
+<figure>
+	<a id="partitions_unlinked"></a>
+	<img src="figures/partitions_unlinked.png" alt="Partitions (unlinked clocks)">
+	<figcaption>Figure 8: Unlinking site models and clock models and linking trees in the Partitions tab of BEAUti2. </figcaption>
+</figure>
+<br>
+
+
+Now set up BEAST Model Test for the site models, but this time we do not want to apply relative rate parameters to the first codon sites and second codon sites. This is because the different rates in these two data subsets will be taken into account in the clock models themselves. 
+
+> Navigate to the **Site Model** tab. Select the first data subset (**passerines_pc1**) and select **BEAST Model Test** from the drop-down list. This time, do NOT check the **estimate box**. Repeat for the second data subset (**passerines_pc2**).
+
+Now we will set up a separate relaxed clock model for each of the two data subsets. 
+
+> Navigate to the **Clock Model** tab. Select the first data subset (**passerines_pc1**) and select **Relaxed Clock Log Normal** from the drop-down list. Repeat for the second data subset (**passerines_pc2**).  
+
+As with the first part of this exercise, we will need to define taxon sets in order to implement constraints on the tree topology and to specify a calibration prior on the root. 
+
+> Navigate to the **Priors** tab. Define the four taxon sets Tyranni, Passeri, Eupasseres, and Passeriformes, as described the first part of this exercise. Back in the **Priors** tab, check the **monophyletic** boxes next to each of these four groups that have been defined.
+
+Set up a lognormal calibration prior on the root, as described in the first part of this exercise. 
+
+> Change the prior distribution on the age of **Passeriformes** to a **Log Normal** distribution. Reveal the options for the prior on **Passeriformes.prior** by clicking on the {% eqinline \blacktriangleright %}. Change the prior distribution by selecting **Log Normal** from the drop-down list. Check the box marked **Mean In Real Space** and set the mean **M** equal to **5.0** and the standard deviation **S** to **0.5**. Set the **Offset** of the lognormal distribution to **43.0** ([Figure 7](#rootcalibration)). 
+
+Next we will specify the prior distribution on the tree topology and branching times. 
+
+> Change the tree model for **Tree.t:passerinesTree** to **Birth Death Model**. 
+
+
+
+
+
+
+
+Now that you have specified all of your data elements, models, priors, and operators, go to the MCMC tab to set the length of the Markov chain, sample frequency, and file names.
+
+> Navigate to the **MCMC** tab. Since we have a limited amount of time for this exercise, change the **Chain Length** to **2,000,000**.
+>
+> Reveal the options for the **tracelog** using the {% eqinline \blacktriangleright %} to the left. Change **Log Every** to **200**. Change the File Name to `passerines_UnlinkedClocks.log`.
+>
+> Reveal the options for the **treelog** using the {% eqinline \blacktriangleright %} to the left. Change **Log Every** to **200**. Change the File Name to `passerines_UnlinkedClocks.trees`. 
+
+Now we are ready to save the XML file!
+
+> Go to **File > Save As** and save the XML file as `passerines_UnlinkedClocks.xml`. Close **BEAUti2** when you are done. 
+
+
+## Running BEAST2
+
+Now you are ready to start your BEAST2 analyses. 
+
+> Execute `passerines_LinkedClocks.xml` in **BEAST2**. You should see the screen output every 1000 steps, reporting the likelihood and various other statistics.
 
 
 
