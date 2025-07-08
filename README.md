@@ -1,9 +1,9 @@
 ---
-author: Author I. Name
+author: Simon Ho,Jacqueline Nguyen
 level: Intermediate
-title: Tutorial template
-subtitle: Template for an empty tutorial
-beastversion: 2.4.2
+title: Molecular clock dating and modelling rate variation
+subtitle: Accounting for evolutionary rate variation in passerine birds
+beastversion: 2.7.7
 ---
 
 
@@ -21,7 +21,7 @@ Some of the text in this tutorial template is just dummy filler text. Please do 
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees 2
 
-BEAST2 is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees {% cite Bouckaert2014 --file Tutorial-Template/master-refs.bib %}. This tutorial uses the BEAST2 version 2.4.2.
+BEAST2 is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees {% cite Bouckaert2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. This tutorial uses the BEAST2 version 2.4.2.
 
 ----
 
@@ -202,7 +202,7 @@ Links to equations or different sections within the same document are a little b
 
 # Useful Links
 
-- [Bayesian Evolutionary Analysis with BEAST 2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file Tutorial-Template/master-refs.bib %}
+- [Bayesian Evolutionary Analysis with BEAST 2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
 - BEAST 2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
 - BEAST 1 website and documentation: [http://beast.bio.ed.ac.uk](http://beast.bio.ed.ac.uk)
 - Join the BEAST user discussion: [http://groups.google.com/group/beast-users](http://groups.google.com/group/beast-users) 
@@ -211,5 +211,5 @@ Links to equations or different sections within the same document are a little b
 
 # Relevant References
 
-{% bibliography --cited --file Tutorial-Template/master-refs.bib %}
+{% bibliography --cited --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
 
