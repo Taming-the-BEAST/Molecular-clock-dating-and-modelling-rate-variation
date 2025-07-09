@@ -8,6 +8,9 @@ beastversion: 2.7.7
 
 
 
+
+
+
 # Background
 
 Evolutionary rate variation is an intrinsic feature of biological data, being driven by a range of life-history, environmental, and biochemical factors. Rates of molecular evolution can vary across lineages, across nucleotide sites, and across regions of the genome. These forms of variation can interact to produce complex patterns of heterogeneity in the data, particularly at the genomic scale {% cite Ho2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. Thus, accounting for evolutionary rate variation represents an important aspect of phylogenetic analysis and molecular dating {% cite dosReis2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}. A range of models are available for this purpose. 
@@ -270,14 +273,133 @@ Now you are ready to start your BEAST2 analyses.
 
 
 
+## Summarising the output
+
+Once the BEAST2 analysis is complete, you will find three new files in your directory. The MCMC samples of various parameters and statistics are written to the file called `passerines_LinkedClocks.log`. The tree state at every sampled step is saved to `passerines_LinkedClocks.trees`. The file called `passerines_LinkedClocks.xml.state` summarises the performance of the proposal mechanisms (operators) used in your MCMC analysis, providing information about the acceptance rate for each move.
+
+The main output files are the `.log` and `.trees` files. We will use **Tracer** to assess convergence and mixing. Tree topologies, branch rates, and node times are summarised using the program **TreeAnnotator** and visualised in **FigTree**.
+
+
+### Tracer
+
+For the analyses using linked and unlinked clock models, _pre-cooked_ output files from two replicate runs of BEAST2 are provided with this exercise. Each replicate analysis was run for 20,000,000 MCMC steps. **The pre-cooked files can be found in the left-hand panel**. Note that some of the files are compressed with zip and you will first need to extract them after downloading.
+
+
+> Open Tracer and import `passerines_LinkedClocks.rep1.log` and `passerines_LinkedClocks.rep2.log` using **File > Import Trace File**.
+>
+> In the **Trace Files** panel, select the two log files using **shift and click**. Display the **Marginal Density** in the right-hand panel. 
+
+For each parameter, the marginal posterior densities from the two runs are shown in different colours. If you look through the various parameters, you will see that the marginal densities are nearly identical between the two runs. This suggests that the two runs have converged on the stationary distribution. By default, 10% of the samples are treated as ‘burn in’ and are excluded from the summary. 
+
+> In the **Trace Files** panel, select **Combined** to display the results from the combined samples from the two runs.
+
+Now have a look at the posterior density of the age of the root (crown Passeriformes). 
+
+> In the **Traces** panel, select **mrca.age(Passeriformes)** and view **Estimates** in the right-hand panel ([Figure 9](#tracer_passerineroot)). 
 
 <figure>
-	<a id=""></a>
-	<img src="figures/.png" alt="">
-	<figcaption>Figure 2: </figcaption>
+	<a id="tracer_passerineroot"></a>
+	<img src="figures/tracer_passerineroot.png" alt="">
+	<figcaption>Figure 9: Viewing the posterior probability density of the age of Passeriformes in Tracer.</figcaption>
 </figure>
 <br>
 
+Consider whether this posterior density matches the calibration prior that we specified for the age of the root. There are some other parameters that are of particular interest in this analysis. 
+
+The **BMT.gammaShape.1** and **BMT.gammaShape.2** parameters show the posterior densities of the shape parameter for gamma-distributed rates across sites. Values below 1 indicate that there is substantial rate variation across the nucleotide sites in the alignment, with most sites evolving slowly but with some sites evolving rapidly. 
+
+The **rate.mean** parameter shows the posterior density of the mean substitution rate throughout the phylogeny (weighted by branch lengths). Because the analysis was calibrated to a timescale of millions of years, based on the calibration prior on the root of the tree, the substitution rate is given in substitutions per site per _million_ years. 
+
+The **rate.coefficientOfVariation** parameter indicates the amount of variation in the substitution rates across branches. The coefficient of variation is computed as the standard deviation divided by the mean. A value of 0 indicates that substitution rates do not vary across the tree, which would be consistent with a strict molecular clock. Values above 1 indicate extreme rate variation across branches. 
+
+The **BMT_mutationRate.1** parameter is the relative evolutionary rate of the first codon sites, while the **BMT_mutationRate.2** parameter is the relative evolutionary rate of the second codon sites. First codon sites are under less selective constraint and so we expect them to evolve more quickly than second codon sites. 
+
+
+
+Now we can compare the results from the analysis using unlinked clock models. 
+
+> In **Tracer**, remove the files from the linked clock analysis by clicking on the **–** button below the **Trace Files** panel. 
+>
+> Import `passerines_UnlinkedClocks.rep1.log` and `passerines_UnlinkedClocks.rep2.log` using **File > Import Trace File**.
+>
+> In the **Trace Files** panel, select **Combined** to display the results from the combined samples from the two runs.
+
+There are several parameters of particular interest in this analysis. 
+
+The **rate.1.mean** and **rate.2.mean** parameters give the posterior densities of the mean substitution rates of the first and second codon sites, respectively. These are absolute (rather than relative) rates, given in substitutions per site per million years. They should be in approximately the same ratio as seen in the analysis using linked clock models. 
+
+The **rate.1.coefficientOfVariation** and **rate.2.coefficientOfVariation** parameters indicate the amount of variation in the substitution rates across branches, for first codon sites and second codon sites, respectively ([Figure 10](#tracer_cov)). In this case they are fairly similar, but perhaps different enough to justify the use of unlinked clock models for these two subsets of the data. 
+
+
+<figure>
+	<a id="tracer_cov"></a>
+	<img src="figures/tracer_cov.png" width="100%" alt="">
+	<figcaption>Figure 10: Viewing the posterior probability densities of the coefficients of rate variation in Tracer.</figcaption>
+</figure>
+<br>
+
+
+### Summarising the trees in TreeAnnotator
+
+For each of our two analyses, we have reviewed the trace files from the two independent runs in Tracer and verified that both runs converged on the posterior distributions and reached stationarity. We can now combine the sampled trees into a single tree file and summarise the results. For simplicity, we will only do this for the analysis that used unlinked clock models. 
+
+> Open the program **LogCombiner** and set the **File type** to **Tree Files**. Next, import `passerines_UnlinkedClocks.rep1.trees` and `passerines_UnlinkedClocks.rep2.trees` using the **+** button. Set a burn-in percentage of **10** for each file, thus discarding the first 10% of the samples in each tree file.
+>
+> Click on the **Choose file ...** button to create an output file and run the program. Name the file `passerines_UnlinkedClocks.combined.trees` ([Figure 11](#logcombiner)).
+
+
+<figure>
+	<a id="logcombiner"></a>
+	<img src="figures/logcombiner.png" width="100%" alt="">
+	<figcaption>Figure 11: Combining tree samples from the two replicate runs in TreeAnnotator.</figcaption>
+</figure>
+<br>
+
+Once LogCombiner has terminated, you will have a file containing 18,000 trees that can be summarised using TreeAnnotator. TreeAnnotator takes a collection of trees and summarises them by identifying the topology with the best support, calculating clade posterior probabilities, and calculating 95% credible intervals for node-specific parameters. We will generate a maximum-clade-credibility tree, which is the topology with the highest product of clade posterior probabilities across all nodes.
+
+> Open the program **TreeAnnotator**. Since we already discarded a set of burn-in trees when combining the tree files, we can leave **Burn in percentage** set to **0**. For the **Target tree type**, choose **Maximum clade credibility tree**. For **Node heights**, choose **Common Ancestor heights**. For **Input Tree File**, choose your combined file `passerines_UnlinkedClocks.combined.trees`. Then name the **Output File** `passerines_UnlinkedClocks.summary.tree` and click **Run**.
+
+
+### Visualising the dated tree
+
+The tree file produced by TreeAnnotator contains the maximum clade credibility tree and is annotated with summaries of the various parameters. The summary tree and its annotations can be visualised in the program FigTree.
+
+> Execute **FigTree** and open the file `passerines_UnlinkedClocks.summary.tree`.
+
+We will adjust some of the settings to improve the visualisation of the tree and to aid your interpretation of the phylogenetic relationships and evolutionary timescale. For example, we can label the nodes with their posterior probabilities and add coloured bars to the nodes to display the 95% credible intervals for the node times. 
+
+> 1. Rearrange the tree using **Tree > Decreasing Node Order**. 
+> 2. Uncheck the box next to **Scale Bar** to remove the scale bar. 
+> 3. To display a timescale, check the **Scale Axis** box. Reveal the options for the scale axis by clicking on the ▶, then check the **Reverse axis** box. 
+> 4. To display the node posterior probabilities, check the **Node Labels** box. Reveal the options for the node labels by clicking on the ▶, then select **posterior** from the drop-down list next to **Display**. 
+> 5. To display the 95% credible intervals for the node times, check the **Node Bars** box. Reveal the options for the node bars by clicking on the ▶, then select **height_95%_HPD** from the drop-down list next to **Display** ([Figure 12](#figtree)). 
+
+<figure>
+	<a id="figtree"></a>
+	<img src="figures/figtree.png" width="100%" alt="">
+	<figcaption>Figure 12: Visualising the maximum-clade-credibility tree in FigTree.</figcaption>
+</figure>
+<br>
+
+Examine the structure of the tree and the timing of the major divergences among orders. You will notice that the suborders Tyranni and Passeri split from each other soon after their divergence from Acanthisitti. The crown nodes of Tyranni and Passeri have similar ages of around 30 to 35 million years. The suborder Passeri, also known as songbirds, contains about 50% of all living bird species ([Figure 13](#passerines2)). 
+
+
+<figure>
+	<a id="passerines2"></a>
+	<img src="figures/passerines2.png" width="100%" alt="">
+	<figcaption>Figure 13: Representatives of the highly diverse passerine suborder Passeri: Superb Lyrebird (<i>Menura novaehollandiae</i>), Red-backed Fairywren (<i>Malurus melanocephalus</i>), and House Sparrow (<i>Passer domesticus</i>). Creative Commons photographs by David Cook, Summerdrought, and Mathias Appel.</figcaption>
+</figure>
+<br>
+
+----
+
+In this exercise, you analysed a mitochondrial data set from 20 passerine birds and used several approaches to account of variation in evolutionary rates:
+
+- Rate variation across nucleotide sites modelled using a gamma distribution.
+- Rate variation across codon sites modelled using parameters for relative rates (linked clocks) or absolute rates (unlinked clocks). 
+- Rate variation across branches modelled using uncorrelated lognormal relaxed clocks. 
+
+These are among the dominant forms of rate variation in molecular data and need to be taken into account in studies of evolutionary timescales. In addition, using a secondary calibration at the root of the tree, you were able to infer the evolutionary timescale of passerines, including the divergence times of the major lineages of this diverse and ecologically important group of birds. 
 
 
 
@@ -295,4 +417,3 @@ Now you are ready to start your BEAST2 analyses.
 # Relevant References
 
 {% bibliography --cited --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
-
