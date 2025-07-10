@@ -165,7 +165,7 @@ Studies of genomic data have supported the division of passerines into three sub
 
 <figure>
 	<a id="passerine_evolution"></a>
-	<img src="figures/passerine_evolution.jpg" width="75%" alt="Passerine Evolutionary Relationships">
+	<img src="figures/passerine_evolution.jpg" width="100%" alt="Passerine Evolutionary Relationships">
 	<figcaption>Figure 5: Evolutionary relationships among the three suborders of passerine birds. </figcaption>
 </figure>
 <br>
