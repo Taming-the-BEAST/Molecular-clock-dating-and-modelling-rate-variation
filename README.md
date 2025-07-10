@@ -77,7 +77,7 @@ Passerines (Order Passeriformes), also known as perching birds, comprise nearly 
 <br>
 
 
-The data files for this tutorial can be downloaded from the left-hand panel. The data set in this tutorial includes publicly available nucleotide sequences that were assembled for a study of evolutionary rate variation in mitochondrial genomes from passerine birds {% cite Nguyen2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}.
+**The data files for this tutorial can be downloaded from the left-hand panel.** The data set in this tutorial includes publicly available nucleotide sequences that were assembled for a study of evolutionary rate variation in mitochondrial genomes from passerine birds {% cite Nguyen2016 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}.
 
 The data set comprises two separate mitochondrial sequence alignments from the 20 passerine taxa. The files contain the first codon sites (`passerines_pc1.nex`) and second codon sites (`passerines_pc2.nex`) of the 13 protein-coding genes in the mitochondrial genome. Together, these data sets comprise 7232 aligned nucleotide sites. The third codon sites have been excluded because they show signs of substitution saturation – they evolve rapidly and have undergone such a large amount of change that the evolutionary signal has been eroded. 
 
@@ -91,23 +91,23 @@ We will use BEAUti2 to select the priors and starting values for our analysis an
 
 ### Installing BEAST2 packages
 
-Next, we need to install a BEAST2 package that will be used in this analysis. The package is called **bModelTest**.
+Next, we need to install two BEAST2 packages that will be used in this analysis. The packages are called **bModelTest** and **CCD**.
 
-> Open the **BEAST 2 Package Manager** by navigating to **File > Manage Packages**. Install the **bModelTest** package by selecting it and clicking the **Install/Upgrade** button ([Figure 2](#packagemanager)). 
+> Open the **BEAST 2 Package Manager** by navigating to **File > Manage Packages**. Install the **bModelTest** and **CCD** packages by selecting it and clicking the **Install/Upgrade** button ([Figure 2](#packagemanager)). 
 >
 >
 
 <figure>
 	<a id="packagemanager"></a>
 	<img src="figures/packagemanager.png" alt="BEAST2 Package Manager">
-	<figcaption>Figure 2: Installing bModelTest in the BEAST 2 Package Manager. </figcaption>
+	<figcaption>Figure 2: Installing bModelTest and CCD in the BEAST 2 Package Manager. </figcaption>
 </figure>
 <br>
 
 
-After the installation of a package, the program is on your computer, but BEAUti2 is unable to load the template files for the newly installed model unless it is restarted. So, you will now need to restart BEAUti2 so that bModelTest is available. 
+After the installation of a package, the program is on your computer, but BEAUti2 is unable to load the template files for the newly installed model unless it is restarted. So, you will now need to restart BEAUti2 so that bModelTest and CCD are available. 
 
-> Close the **BEAST 2 Package Manager** and restart **BEAUti2** to load the **bModelTest** package.
+> Close the **BEAST 2 Package Manager** and restart **BEAUti2** to load the **bModelTest** and **CCD** packages.
 
 
 ### Importing the sequence alignments
@@ -387,14 +387,15 @@ For each of our two analyses, we have reviewed the trace files from the two inde
 </figure>
 <br>
 
-Once LogCombiner has terminated, you will have a file containing 18,000 trees that can be summarised using TreeAnnotator. TreeAnnotator takes a collection of trees and summarises them by identifying the topology with the best support, calculating clade posterior probabilities, and calculating 95% credible intervals for node-specific parameters. We will generate a maximum-clade-credibility tree, which is the topology with the highest product of clade posterior probabilities across all nodes.
+Once LogCombiner has terminated, you will have a file containing 18,000 trees that can be summarised using TreeAnnotator. TreeAnnotator takes a collection of trees and produces a summary so that we can interpret the results more easily. There are various ways to summarise the collection of sampled trees, but here we will use an estimate based on conditional clade distributions (using the clade frequencies in the sampled trees). A description of how this “CCD0” tree is computed can be found on the [BEAST2 website](http://www.beast2.org/2025/03/01/CCD0-revisited.html). 
 
-> Open the program **TreeAnnotator**. Since we already discarded a set of burn-in trees when combining the tree files, we can leave **Burn in percentage** set to **0**. For the **Target tree type**, choose **Maximum clade credibility tree**. For **Node heights**, choose **Common Ancestor heights**. For **Input Tree File**, choose your combined file `passerines_UnlinkedClocks.combined.trees`. Then name the **Output File** `passerines_UnlinkedClocks.summary.tree` and click **Run**.
+
+> Open the program **TreeAnnotator**. Since we already discarded a set of burn-in trees when combining the tree files, we can leave **Burn in percentage** set to **0**. For the **Target tree type**, choose **MAP (CCD0)**. For **Node heights**, choose **Common Ancestor heights**. For **Input Tree File**, choose your combined file `passerines_UnlinkedClocks.combined.trees`. Then name the **Output File** `passerines_UnlinkedClocks.summary.tree` and click **Run**.
 
 
 ### Visualising the dated tree
 
-The tree file produced by TreeAnnotator contains the maximum clade credibility tree and is annotated with summaries of the various parameters. The summary tree and its annotations can be visualised in the program FigTree.
+The tree file produced by TreeAnnotator contains the CCD0 tree and is annotated with summaries of the various parameters. The summary tree and its annotations can be visualised in the program FigTree.
 
 > Execute **FigTree** and open the file `passerines_UnlinkedClocks.summary.tree`.
 
@@ -402,14 +403,14 @@ We will adjust some of the settings to improve the visualisation of the tree and
 
 > 1. Rearrange the tree using **Tree > Decreasing Node Order**. 
 > 2. Uncheck the box next to **Scale Bar** to remove the scale bar. 
-> 3. To display a timescale, check the **Scale Axis** box. Reveal the options for the scale axis by clicking on the ▶, then check the **Reverse axis** box. 
-> 4. To display the node posterior probabilities, check the **Node Labels** box. Reveal the options for the node labels by clicking on the ▶, then select **posterior** from the drop-down list next to **Display**. 
-> 5. To display the 95% credible intervals for the node times, check the **Node Bars** box. Reveal the options for the node bars by clicking on the ▶, then select **height_95%_HPD** from the drop-down list next to **Display** ([Figure 12](#figtree)). 
+> 3. To display a timescale, check the **Scale Axis** box. Reveal the options for the scale axis by clicking on the {% eqinline \blacktriangleright %}, then check the **Reverse axis** box. 
+> 4. To display the node posterior probabilities, check the **Node Labels** box. Reveal the options for the node labels by clicking on the {% eqinline \blacktriangleright %}, then select **posterior** from the drop-down list next to **Display**. 
+> 5. To display the 95% credible intervals for the node times, check the **Node Bars** box. Reveal the options for the node bars by clicking on the {% eqinline \blacktriangleright %}, then select **height_95%_HPD** from the drop-down list next to **Display** ([Figure 12](#figtree)). 
 
 <figure>
 	<a id="figtree"></a>
 	<img src="figures/figtree.png" width="100%" alt="FigTree">
-	<figcaption>Figure 12: Visualising the maximum-clade-credibility tree in FigTree.</figcaption>
+	<figcaption>Figure 12: Visualising the CCD0 tree in FigTree.</figcaption>
 </figure>
 <br>
 
@@ -443,7 +444,6 @@ These are among the dominant forms of rate variation in molecular data and need 
 
 - [Bayesian Evolutionary Analysis with BEAST 2](http://www.beast2.org/book.html) {% cite BEAST2book2014 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs.bib %}
 - BEAST 2 website and documentation: [http://www.beast2.org/](http://www.beast2.org/)
-- BEAST 1 website and documentation: [http://beast.bio.ed.ac.uk](http://beast.bio.ed.ac.uk)
 - Join the BEAST user discussion: [http://groups.google.com/group/beast-users](http://groups.google.com/group/beast-users) 
 
 ----
