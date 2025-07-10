@@ -1,7 +1,7 @@
 ---
 author: Simon Ho,Jacqueline Nguyen
 editor: Louis du Plessis
-level: Intermediate
+level: Beginner
 title: Molecular clock dating and modelling rate variation
 subtitle: Accounting for evolutionary rate variation in passerine birds
 beastversion: 2.7.7
@@ -172,7 +172,7 @@ Studies of genomic data have supported the division of passerines into three sub
 
 In addition, we can use a previous phylogenetic estimate of the age of the passerine crown group to inform the prior distribution for the age of the root. To incorporate these pieces of information, we need to create taxon sets in BEAUti2. 
 
-> Navigate to the **Priors** tab and scroll to the bottom of the window. Click the **+ Add Prior** button to create a new taxon set. Enter **Tyranni** for the **Taxon set label**, select the three taxa labelled with Tyranni, move these to the right-hand column, and click **OK** ([Figure 6](#taxonsets)). 
+> Navigate to the **Priors** tab and scroll to the bottom of the window. Click the **+ Add Prior** button to create a new taxon set. To do so select the MRCA prior option from the drop-down list ([Figure 6](#taxonsets)). Enter **Tyranni** for the **Taxon set label**, select the three taxa labelled with Tyranni, move these to the right-hand column, and click **OK** ([Figure 6](#taxonsets)). 
 
 
 <figure>
@@ -218,7 +218,9 @@ Next we will specify the prior distribution on the tree topology and branching t
 
 > Change the tree model for **Tree.t:passerinesTree** to **Birth Death Model**. 
 
+The birth death model also has two hyperparameters: the diversification or relative birth rate (**BDBirthRate.t**), equal to the difference between the speciation and extinction rates, and the turnover or relative death rate (**BDDeathRate.t**), equal to the extinction rate divided by the speciation rate. Just like the clock model these two hyperparameters also have hyperpriors and as with the clock model we will leave these priors at the default settings. 
 
+Remember that in a real analysis we should use our prior knowledge to inform prior choices and not simply leave priors at the default settings! 
 
 
 
@@ -244,7 +246,7 @@ Now we are ready to save the XML file!
 
 Now we will set up a second analysis in which we unlink the clock models between the two data subsets, so that one relaxed clock model is applied to the first codon sites and a second, separate relaxed clock model is applied to the second codon sites. 
 
-> Open **BEAUti2**. In the **Partitions** tab, import the data files `passerines_pc1.nex` and ` passerines_pc2.nex`.
+> Open **BEAUti2**. In the **Partitions** tab, import the data files `passerines_pc1.nex` and `passerines_pc2.nex`.
 > 
 > Highlight the two data subsets (using **shift and click**) and click on **Unlink Site Models**. Then, click on **Unlink Clock Models** so that separate clock models are applied to the two data subsets. Click **Link Trees** to ensure that both data subsets share the same tree topology and branching times ([Figure 8](#partitions_unlinked)).
 >
@@ -296,6 +298,7 @@ Now we are ready to save the XML file!
 
 > Go to **File > Save As** and save the XML file as `passerines_UnlinkedClocks.xml`. Close **BEAUti2** when you are done. 
 
+----
 
 ## Running BEAST2
 
@@ -303,6 +306,7 @@ Now you are ready to start your BEAST2 analyses.
 
 > Execute `passerines_LinkedClocks.xml` in **BEAST2**. You should see the screen output every 1000 steps, reporting the likelihood and various other statistics.
 
+----
 
 
 ## Summarising the output
@@ -321,18 +325,25 @@ For the analyses using linked and unlinked clock models, _pre-cooked_ output fil
 >
 > In the **Trace Files** panel, select the two log files using **shift and click**. Display the **Marginal Density** in the right-hand panel. 
 
-For each parameter, the marginal posterior densities from the two runs are shown in different colours. If you look through the various parameters, you will see that the marginal densities are nearly identical between the two runs. This suggests that the two runs have converged on the stationary distribution. By default, 10% of the samples are treated as ‘burn-in’ and are excluded from the summary. 
+For each parameter, the marginal posterior densities from the two runs are shown in different colours. If you look through the various parameters, you will see that the marginal densities are nearly identical between the two runs ([Figure 9](#tracer_marginals)). This suggests that the two runs have converged on the stationary distribution. By default, 10% of the samples are treated as ‘burn-in’ and are excluded from the summary. 
+
+<figure>
+	<a id="tracer_marginals"></a>
+	<img src="figures/tracer_marginals.png" alt="Marginal densities">
+	<figcaption>Figure 9: Checking that both chains converged to the same posterior.</figcaption>
+</figure>
+<br>
 
 > In the **Trace Files** panel, select **Combined** to display the results from the combined samples from the two runs.
 
 Now have a look at the posterior density of the age of the root (crown Passeriformes). 
 
-> In the **Traces** panel, select **mrca.age(Passeriformes)** and view **Estimates** in the right-hand panel ([Figure 9](#tracer_passerineroot)). 
+> In the **Traces** panel, select **mrca.age(Passeriformes)** and view **Estimates** in the right-hand panel ([Figure 10](#tracer_passerineroot)). 
 
 <figure>
 	<a id="tracer_passerineroot"></a>
 	<img src="figures/tracer_passerineroot.png" alt="Passerine root">
-	<figcaption>Figure 9: Viewing the posterior probability density of the age of Passeriformes in Tracer.</figcaption>
+	<figcaption>Figure 10: Viewing the posterior probability density of the age of Passeriformes in Tracer.</figcaption>
 </figure>
 <br>
 
@@ -344,8 +355,15 @@ The **rate.mean** parameter shows the posterior density of the mean substitution
 
 The **rate.coefficientOfVariation** parameter indicates the amount of variation in the substitution rates across branches. The coefficient of variation is computed as the standard deviation divided by the mean. A value of 0 indicates that substitution rates do not vary across the tree, which would be consistent with a strict molecular clock. Values above 1 indicate extreme rate variation across branches. 
 
-The **BMT_mutationRate.1** parameter is the relative evolutionary rate of the first codon sites, while the **BMT_mutationRate.2** parameter is the relative evolutionary rate of the second codon sites. First codon sites are under less selective constraint and so we expect them to evolve more quickly than second codon sites. 
+The **BMT_mutationRate.1** parameter is the relative evolutionary rate of the first codon sites, while the **BMT_mutationRate.2** parameter is the relative evolutionary rate of the second codon sites. First codon sites are under less selective constraint and so we expect them to evolve more quickly than second codon sites ([Figure 11](#tracer_mutationrates)). 
 
+
+<figure>
+	<a id="tracer_mutationrates"></a>
+	<img src="figures/tracer_mutationrates.png" alt="Relative mutation rates">
+	<figcaption>Figure 11: The relative evolutionary rates of first and second codon sites.</figcaption>
+</figure>
+<br>
 
 
 Now we can compare the results from the analysis using unlinked clock models. 
@@ -358,15 +376,26 @@ Now we can compare the results from the analysis using unlinked clock models.
 
 There are several parameters of particular interest in this analysis. 
 
-The **rate.1.mean** and **rate.2.mean** parameters give the posterior densities of the mean substitution rates of the first and second codon sites, respectively. These are absolute (rather than relative) rates, given in substitutions per site per million years. They should be in approximately the same ratio as seen in the analysis using linked clock models. 
+The **rate.1.mean** and **rate.2.mean** parameters give the posterior densities of the mean substitution rates of the first and second codon sites, respectively. These are absolute (rather than relative) rates, given in substitutions per site per million years. They should be in approximately the same ratio as seen in the analysis using linked clock models. To look at both rates together in Tracer we have to display the rates on a logarithmic scale ([Figure 12](#tracer_logclockrates)).
 
-The **rate.1.coefficientOfVariation** and **rate.2.coefficientOfVariation** parameters indicate the amount of variation in the substitution rates across branches, for first codon sites and second codon sites, respectively ([Figure 10](#tracer_cov)). In this case they are fairly similar, but perhaps different enough to justify the use of unlinked clock models for these two subsets of the data. 
+> In **Tracer**, select the two mean substitution rates using **shift and click**. Next, click on **Setup** below the plot and check the **Log axis** box under **Y Axis**.
+
+
+<figure>
+	<a id="tracer_logclockrates"></a>
+	<img src="figures/tracer_logclockrates.png" width="100%" alt="Coefficient of variation">
+	<figcaption>Figure 12: Viewing the posterior probability densities of the coefficients of rate variation in Tracer.</figcaption>
+</figure>
+<br>
+
+
+The **rate.1.coefficientOfVariation** and **rate.2.coefficientOfVariation** parameters indicate the amount of variation in the substitution rates across branches, for first codon sites and second codon sites, respectively ([Figure 13](#tracer_cov)). In this case they are fairly similar, but perhaps different enough to justify the use of unlinked clock models for these two subsets of the data. 
 
 
 <figure>
 	<a id="tracer_cov"></a>
 	<img src="figures/tracer_cov.png" width="100%" alt="Coefficient of variation">
-	<figcaption>Figure 10: Viewing the posterior probability densities of the coefficients of rate variation in Tracer.</figcaption>
+	<figcaption>Figure 13: Viewing the posterior probability densities of the coefficients of rate variation in Tracer.</figcaption>
 </figure>
 <br>
 
@@ -377,13 +406,13 @@ For each of our two analyses, we have reviewed the trace files from the two inde
 
 > Open the program **LogCombiner** and set the **File type** to **Tree Files**. Next, import `passerines_UnlinkedClocks.rep1.trees` and `passerines_UnlinkedClocks.rep2.trees` using the **+** button. Set a burn-in percentage of **10** for each file, thus discarding the first 10% of the samples in each tree file.
 >
-> Click on the **Choose file ...** button to create an output file and run the program. Name the file `passerines_UnlinkedClocks.combined.trees` ([Figure 11](#logcombiner)).
+> Click on the **Choose file ...** button to create an output file and run the program. Name the file `passerines_UnlinkedClocks.combined.trees` ([Figure 14](#logcombiner)).
 
 
 <figure>
 	<a id="logcombiner"></a>
 	<img src="figures/logcombiner.png" width="75%" alt="Logcombiner">
-	<figcaption>Figure 11: Combining tree samples from the two replicate runs in TreeAnnotator.</figcaption>
+	<figcaption>Figure 14: Combining tree samples from the two replicate runs in TreeAnnotator.</figcaption>
 </figure>
 <br>
 
@@ -405,22 +434,22 @@ We will adjust some of the settings to improve the visualisation of the tree and
 > 2. Uncheck the box next to **Scale Bar** to remove the scale bar. 
 > 3. To display a timescale, check the **Scale Axis** box. Reveal the options for the scale axis by clicking on the {% eqinline \blacktriangleright %}, then check the **Reverse axis** box. 
 > 4. To display the node posterior probabilities, check the **Node Labels** box. Reveal the options for the node labels by clicking on the {% eqinline \blacktriangleright %}, then select **posterior** from the drop-down list next to **Display**. 
-> 5. To display the 95% credible intervals for the node times, check the **Node Bars** box. Reveal the options for the node bars by clicking on the {% eqinline \blacktriangleright %}, then select **height_95%_HPD** from the drop-down list next to **Display** ([Figure 12](#figtree)). 
+> 5. To display the 95% credible intervals for the node times, check the **Node Bars** box. Reveal the options for the node bars by clicking on the {% eqinline \blacktriangleright %}, then select **height_95%_HPD** from the drop-down list next to **Display** ([Figure 15](#figtree)). 
 
 <figure>
 	<a id="figtree"></a>
 	<img src="figures/figtree.png" width="100%" alt="FigTree">
-	<figcaption>Figure 12: Visualising the CCD0 tree in FigTree.</figcaption>
+	<figcaption>Figure 15: Visualising the CCD0 tree in FigTree.</figcaption>
 </figure>
 <br>
 
-Examine the structure of the tree and the timing of the major divergences among orders. You will notice that the suborders Tyranni and Passeri split from each other soon after their divergence from Acanthisitti. The crown nodes of Tyranni and Passeri have similar ages of around 30 to 35 million years. The suborder Passeri, also known as songbirds, contains about 50% of all living bird species ([Figure 13](#passerines2)). 
+Examine the structure of the tree and the timing of the major divergences among orders. You will notice that the suborders Tyranni and Passeri split from each other soon after their divergence from Acanthisitti. The crown nodes of Tyranni and Passeri have similar ages of around 30 to 35 million years. The suborder Passeri, also known as songbirds, contains about 50% of all living bird species ([Figure 16](#passerines2)). 
 
 
 <figure>
 	<a id="passerines2"></a>
 	<img src="figures/passerines2.jpg" width="100%" alt="More passerines">
-	<figcaption>Figure 13: Representatives of the highly diverse passerine suborder Passeri: Superb Lyrebird (<i>Menura novaehollandiae</i>), Red-backed Fairywren (<i>Malurus melanocephalus</i>), and House Sparrow (<i>Passer domesticus</i>). Creative Commons photographs by David Cook, Summerdrought, and Mathias Appel.</figcaption>
+	<figcaption>Figure 16: Representatives of the highly diverse passerine suborder Passeri: Superb Lyrebird (<i>Menura novaehollandiae</i>), Red-backed Fairywren (<i>Malurus melanocephalus</i>), and House Sparrow (<i>Passer domesticus</i>). Creative Commons photographs by David Cook, Summerdrought, and Mathias Appel.</figcaption>
 </figure>
 <br>
 
