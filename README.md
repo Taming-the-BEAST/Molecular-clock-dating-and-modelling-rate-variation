@@ -5,6 +5,8 @@ level: Intermediate
 title: Molecular clock dating and modelling rate variation
 subtitle: Accounting for evolutionary rate variation in passerine birds
 beastversion: 2.7.7
+tracerversion: 1.7.x
+figtreeversion: 1.4.x
 ---
 
 
@@ -19,8 +21,39 @@ This tutorial will provide an introduction to using multiple relaxed clock model
 
 # Programs used in this Exercise 
 
+### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees
+
+BEAST2 ([http://beast2.org](http://beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite Bouckaert2014 Bouckaert2019 --file Prior-selection/master-refs %}.
 
 
+### BEAUti2 - Bayesian Evolutionary Analysis Utility
+
+BEAUti2 is a graphical user interface tool for generating BEAST2 XML configuration files.
+
+Both BEAST2 and BEAUti2 are Java programs, which means that the exact same code runs on all platforms. For us it simply means that the interface will be the same on all platforms. The screenshots used in this tutorial are taken on a Mac OS X computer; however, both programs will have the same layout and functionality on both Windows and Linux. BEAUti2 is provided as a part of the BEAST2 package so you do not need to install it separately.
+
+
+### TreeAnnotator
+
+TreeAnnotator is used to produce a summary tree from the posterior sample of trees using one of the available algorithms. It can also be used to summarise and visualise the posterior estimates of other tree parameters (e.g. node height).
+
+TreeAnnotator is provided as a part of the BEAST2 package so you do not need to install it separately.
+
+### LogCombineer
+
+LogCombiner is used to combine log and tree files from multiple runs of BEAST2. LogCombiner can also be used to subsample chains or discard the burn-in. 
+
+LogCombiner is provided as a part of the BEAST2 package so you do not need to install it separately.
+
+
+### Tracer 
+
+Tracer ([http://beast.community/tracer](http://beast.community/tracer)) is used to summarize the posterior estimates of the various parameters sampled by the Markov Chain. This program can be used for visual inspection and to assess convergence. It helps to quickly view median estimates and 95% highest posterior density intervals of the parameters, and calculates the effective sample sizes (ESS) of parameters. It can also be used to investigate potential parameter correlations. We will be using Tracer v{{ page.tracerversion }}.
+
+
+### FigTree
+
+FigTree ([http://beast.community/figtree](http://beast.community/figtree)) is a program for viewing trees and producing publication-quality figures. It can interpret the node-annotations created on the summary trees by TreeAnnotator, allowing the user to display node-based statistics (e.g. posterior probabilities). We will be using FigTree v{{ page.figtreeversion }}.
 
 
 ----
@@ -132,7 +165,7 @@ Studies of genomic data have supported the division of passerines into three sub
 
 <figure>
 	<a id="passerine_evolution"></a>
-	<img src="figures/passerine_evolution.jpg" alt="Passerine Evolutionary Relationships">
+	<img src="figures/passerine_evolution.jpg" width="75%" alt="Passerine Evolutionary Relationships">
 	<figcaption>Figure 5: Evolutionary relationships among the three suborders of passerine birds. </figcaption>
 </figure>
 <br>
@@ -288,7 +321,7 @@ For the analyses using linked and unlinked clock models, _pre-cooked_ output fil
 >
 > In the **Trace Files** panel, select the two log files using **shift and click**. Display the **Marginal Density** in the right-hand panel. 
 
-For each parameter, the marginal posterior densities from the two runs are shown in different colours. If you look through the various parameters, you will see that the marginal densities are nearly identical between the two runs. This suggests that the two runs have converged on the stationary distribution. By default, 10% of the samples are treated as ‘burn in’ and are excluded from the summary. 
+For each parameter, the marginal posterior densities from the two runs are shown in different colours. If you look through the various parameters, you will see that the marginal densities are nearly identical between the two runs. This suggests that the two runs have converged on the stationary distribution. By default, 10% of the samples are treated as ‘burn-in’ and are excluded from the summary. 
 
 > In the **Trace Files** panel, select **Combined** to display the results from the combined samples from the two runs.
 
@@ -349,7 +382,7 @@ For each of our two analyses, we have reviewed the trace files from the two inde
 
 <figure>
 	<a id="logcombiner"></a>
-	<img src="figures/logcombiner.png" width="100%" alt="Logcombiner">
+	<img src="figures/logcombiner.png" width="75%" alt="Logcombiner">
 	<figcaption>Figure 11: Combining tree samples from the two replicate runs in TreeAnnotator.</figcaption>
 </figure>
 <br>
