@@ -165,7 +165,7 @@ Studies of genomic data have supported the division of passerines into three sub
 
 <figure>
 	<a id="passerine_evolution"></a>
-	<img src="figures/passerine_evolution.jpg" width="100%" alt="Passerine Evolutionary Relationships">
+	<img src="figures/passerine_evolution.jpg" width="75%" alt="Passerine Evolutionary Relationships">
 	<figcaption>Figure 5: Evolutionary relationships among the three suborders of passerine birds. </figcaption>
 </figure>
 <br>
@@ -177,7 +177,7 @@ In addition, we can use a previous phylogenetic estimate of the age of the passe
 
 <figure>
 	<a id="taxonsets"></a>
-	<img src="figures/taxonsets.png" width="75%" alt="Taxon sets">
+	<img src="figures/taxonsets.png" width="100%" alt="Taxon sets">
 	<figcaption>Figure 6: Defining a taxon set called “Tyranni” in the Taxon set editor in BEAUti2.</figcaption>
 </figure>
 <br>
