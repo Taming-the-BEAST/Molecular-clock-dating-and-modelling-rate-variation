@@ -1,14 +1,11 @@
 ---
 author: Simon Ho,Jacqueline Nguyen
+editor: Louis du Plessis
 level: Intermediate
 title: Molecular clock dating and modelling rate variation
 subtitle: Accounting for evolutionary rate variation in passerine birds
 beastversion: 2.7.7
 ---
-
-
-
-
 
 
 # Background
@@ -24,6 +21,8 @@ This tutorial will provide an introduction to using multiple relaxed clock model
 
 
 
+
+
 ----
 
 # Practical: Using multiple clock models
@@ -34,12 +33,12 @@ This tutorial will walk you through an analysis of mitochondrial genome data fro
 
 ## The data 
 
-Passerines (Order Passeriformes), also known as perching birds, comprise nearly 60% of all living bird species. They have diversified into a broad range of ecological roles and can be found in almost all habitats across the world ([Figure 1](#passerines)). Mitochondrial genomes have been sequenced for hundreds of passerine species. 
+Passerines (Order Passeriformes), also known as perching birds, comprise nearly 60% of all living bird species. They have diversified into a broad range of ecological roles and can be found in almost all habitats across the world ([Figure 1](#passerines1)). Mitochondrial genomes have been sequenced for hundreds of passerine species. 
 
 
 <figure>
-	<a id="passerines"></a>
-	<img src="figures/passerines.png" alt="passerines">
+	<a id="passerines1"></a>
+	<img src="figures/passerines1.png" alt="passerines">
 	<figcaption>Figure 1: Rifleman (<i>Acanthisitta chloris</i>; <i>Acanthisitti</i>), Fairy Pitta (<i>Pitta nympha</i>, <i>Tyranni</i>), and American Robin (<i>Turdus migratorius</i>; <i>Passeri</i>), representing the three major lineages of passerine birds. Creative Commons photographs by Brian Ralphs, Jason Thompson, Rhododendrites.</figcaption>
 </figure>
 <br>
@@ -87,13 +86,13 @@ Next we will load the sequence alignments from our two NEXUS files.
 Now that the data are loaded into BEAUti2, we can unlink the site models, link the clock models, link the trees, and rename these variables so that they are easier to understand in the output files. 
 
 
-> Highlight the two data subsets (using **shift and click**) and click on **Unlink Site Models** to assume different models of sequence evolution for each of the two data subsets (the site models are typically already unlinked by default). Click the **Link Clock Models** button so that the two data subsets share the same model of branch rates. Click the **Link Trees** button to ensure that both data subsets share the same tree topology and branching times ([Figure 3](#partitions)). 
+> Highlight the two data subsets (using **shift and click**) and click on **Unlink Site Models** to assume different models of sequence evolution for each of the two data subsets (the site models are typically already unlinked by default). Click the **Link Clock Models** button so that the two data subsets share the same model of branch rates. Click the **Link Trees** button to ensure that both data subsets share the same tree topology and branching times ([Figure 3](#partitions_linked)). 
 >
 > Double click on the clock model for the first codon sites (**passerines_pc1**) and rename it to **passerinesClock**. Then click on the tree for the first codon sites (**passerines_pc1**) and rename it to **passerinesTree**. 
 
 <figure>
-	<a id="partitions"></a>
-	<img src="figures/partitions.png" alt="Partitions">
+	<a id="partitions_linked"></a>
+	<img src="figures/partitions_linked.png" alt="Partitions (linked clocks)">
 	<figcaption>Figure 3: Unlinking site models and linking clock models and trees in the Partitions tab of BEAUti2. </figcaption>
 </figure>
 <br>
@@ -170,7 +169,7 @@ In the **Priors** tab we can add an informative prior on the age of the root, ba
 
 <figure>
 	<a id="rootcalibration"></a>
-	<img src="figures/rootcalibration.png" alt="">
+	<img src="figures/rootcalibration.png" alt="Root calibration">
 	<figcaption>Figure 7: Specifying an offset lognormal prior distribution on the age of the root. </figcaption>
 </figure>
 <br>
@@ -299,7 +298,7 @@ Now have a look at the posterior density of the age of the root (crown Passerifo
 
 <figure>
 	<a id="tracer_passerineroot"></a>
-	<img src="figures/tracer_passerineroot.png" alt="">
+	<img src="figures/tracer_passerineroot.png" alt="Passerine root">
 	<figcaption>Figure 9: Viewing the posterior probability density of the age of Passeriformes in Tracer.</figcaption>
 </figure>
 <br>
@@ -333,7 +332,7 @@ The **rate.1.coefficientOfVariation** and **rate.2.coefficientOfVariation** para
 
 <figure>
 	<a id="tracer_cov"></a>
-	<img src="figures/tracer_cov.png" width="100%" alt="">
+	<img src="figures/tracer_cov.png" width="100%" alt="Coefficient of variation">
 	<figcaption>Figure 10: Viewing the posterior probability densities of the coefficients of rate variation in Tracer.</figcaption>
 </figure>
 <br>
@@ -350,7 +349,7 @@ For each of our two analyses, we have reviewed the trace files from the two inde
 
 <figure>
 	<a id="logcombiner"></a>
-	<img src="figures/logcombiner.png" width="100%" alt="">
+	<img src="figures/logcombiner.png" width="100%" alt="Logcombiner">
 	<figcaption>Figure 11: Combining tree samples from the two replicate runs in TreeAnnotator.</figcaption>
 </figure>
 <br>
@@ -376,7 +375,7 @@ We will adjust some of the settings to improve the visualisation of the tree and
 
 <figure>
 	<a id="figtree"></a>
-	<img src="figures/figtree.png" width="100%" alt="">
+	<img src="figures/figtree.png" width="100%" alt="FigTree">
 	<figcaption>Figure 12: Visualising the maximum-clade-credibility tree in FigTree.</figcaption>
 </figure>
 <br>
@@ -386,12 +385,14 @@ Examine the structure of the tree and the timing of the major divergences among 
 
 <figure>
 	<a id="passerines2"></a>
-	<img src="figures/passerines2.png" width="100%" alt="">
+	<img src="figures/passerines2.png" width="100%" alt="More passerines">
 	<figcaption>Figure 13: Representatives of the highly diverse passerine suborder Passeri: Superb Lyrebird (<i>Menura novaehollandiae</i>), Red-backed Fairywren (<i>Malurus melanocephalus</i>), and House Sparrow (<i>Passer domesticus</i>). Creative Commons photographs by David Cook, Summerdrought, and Mathias Appel.</figcaption>
 </figure>
 <br>
 
 ----
+
+# Summary of outcomes
 
 In this exercise, you analysed a mitochondrial data set from 20 passerine birds and used several approaches to account of variation in evolutionary rates:
 
