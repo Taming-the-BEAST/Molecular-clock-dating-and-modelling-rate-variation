@@ -23,7 +23,7 @@ This tutorial will provide an introduction to using multiple relaxed clock model
 
 ### BEAST2 - Bayesian Evolutionary Analysis Sampling Trees
 
-BEAST2 ([http://beast2.org](http://beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite Bouckaert2014 Bouckaert2019 --file Prior-selection/master-refs %}.
+BEAST2 ([http://beast2.org](http://beast2.org)) is a free software package for Bayesian evolutionary analysis of molecular sequences using MCMC and strictly oriented toward inference using rooted, time-measured phylogenetic trees. This tutorial is written for BEAST v{{ page.beastversion }} {% cite Bouckaert2014 Bouckaert2019 --file Molecular-clock-dating-and-modelling-rate-variation/master-refs %}.
 
 
 ### BEAUti2 - Bayesian Evolutionary Analysis Utility
