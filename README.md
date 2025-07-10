@@ -38,7 +38,7 @@ Passerines (Order Passeriformes), also known as perching birds, comprise nearly 
 
 <figure>
 	<a id="passerines1"></a>
-	<img src="figures/passerines1.png" alt="passerines">
+	<img src="figures/passerines1.jpg" alt="passerines">
 	<figcaption>Figure 1: Rifleman (<i>Acanthisitta chloris</i>; <i>Acanthisitti</i>), Fairy Pitta (<i>Pitta nympha</i>, <i>Tyranni</i>), and American Robin (<i>Turdus migratorius</i>; <i>Passeri</i>), representing the three major lineages of passerine birds. Creative Commons photographs by Brian Ralphs, Jason Thompson, Rhododendrites.</figcaption>
 </figure>
 <br>
@@ -132,7 +132,7 @@ Studies of genomic data have supported the division of passerines into three sub
 
 <figure>
 	<a id="passerine_evolution"></a>
-	<img src="figures/passerine_evolution.png" alt="Passerine Evolutionary Relationships">
+	<img src="figures/passerine_evolution.jpg" alt="Passerine Evolutionary Relationships">
 	<figcaption>Figure 5: Evolutionary relationships among the three suborders of passerine birds. </figcaption>
 </figure>
 <br>
@@ -385,7 +385,7 @@ Examine the structure of the tree and the timing of the major divergences among 
 
 <figure>
 	<a id="passerines2"></a>
-	<img src="figures/passerines2.png" width="100%" alt="More passerines">
+	<img src="figures/passerines2.jpg" width="100%" alt="More passerines">
 	<figcaption>Figure 13: Representatives of the highly diverse passerine suborder Passeri: Superb Lyrebird (<i>Menura novaehollandiae</i>), Red-backed Fairywren (<i>Malurus melanocephalus</i>), and House Sparrow (<i>Passer domesticus</i>). Creative Commons photographs by David Cook, Summerdrought, and Mathias Appel.</figcaption>
 </figure>
 <br>
