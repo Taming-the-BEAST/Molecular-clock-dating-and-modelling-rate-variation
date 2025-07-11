@@ -39,7 +39,7 @@ TreeAnnotator is used to produce a summary tree from the posterior sample of tre
 
 TreeAnnotator is provided as a part of the BEAST2 package so you do not need to install it separately.
 
-### LogCombineer
+### LogCombiner
 
 LogCombiner is used to combine log and tree files from multiple runs of BEAST2. LogCombiner can also be used to subsample chains or discard the burn-in. 
 
