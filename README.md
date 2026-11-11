@@ -1,12 +1,24 @@
 ---
 author: Simon Ho,Jacqueline Nguyen
 editor: Louis du Plessis
-level: Beginner
 title: Molecular clock dating and modelling rate variation
 subtitle: Accounting for evolutionary rate variation in passerine birds
-beastversion: 2.7.7
 tracerversion: 1.7.x
 figtreeversion: 1.4.x
+beastversion_tutorial: 2.7.7
+workflow: Advanced analysis
+status: current
+keywords:
+- relaxed clock
+- molecular clock
+- substitution models
+- site models
+- calibration
+packages:
+- bModelTest
+- CCD
+domains:
+- macroevolution
 ---
 
 
